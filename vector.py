@@ -1,3 +1,4 @@
+# coding=utf8
 """
 The MIT License (MIT)
 
@@ -24,38 +25,84 @@ THE SOFTWARE.
 
 import math
 
+UNIT_DEGREES = 'decrees'
+UNIT_RADIANS = 'radians'
+TAU = 2 * math.pi
+
 
 class Vector(object):
+    UNIT_DEGREES = UNIT_DEGREES
+    UNIT_RADIANS = UNIT_RADIANS
+    """An Iterable, (roughly) Immutable class for representing vectors.
+
+    A vector is simply an array of numbers (usually 2 or 3 for spacial vectors)
+    but this includes a bunch of useful vector math operations too.
+    """
     def __init__(self, *args):
-        """ Create a vector, example: v = Vector(1,2) """
+        """Create a vector
+
+        Examples
+        --------
+        >>>v = Vector(1, 2)
+        Vector(1, 2)
+        """
         if len(args) == 0:
             self.values = (0, 0)
         else:
             self.values = args
 
     def norm(self):
-        """ Returns the norm (length, magnitude) of the vector """
+        """Returns the norm (length, magnitude) of the vector
+
+        Returns
+        -------
+        float
+        """
         return math.sqrt(sum(comp**2 for comp in self))
 
-    def argument(self):
-        """ Returns the argument of the vector, the angle clockwise from +y."""
-        arg_in_rad = math.acos(Vector(0,1)*self/self.norm())
+    def argument(self, unit=UNIT_RADIANS):
+        """Returns the argument of the vector
+
+        Argument: The angle between the vector and the vector [0, 1], clockwise
+
+        Parameters
+        ----------
+        unit : UNIT_DEGREES or UNIT_RADIANS
+            determines the unit in which the argument will be expressed.
+            defaults to UNIT_RADIANS
+
+        Returns
+        -------
+        float
+        """
+        arg_in_rad = math.acos(Vector(0, 1) * self / self.norm())
         arg_in_deg = math.degrees(arg_in_rad)
-        if self.values[0]<0: return 360 - arg_in_deg
-        else: return arg_in_deg
+        if self.values[0] < 0:
+            return 360 - arg_in_deg
+
+        return arg_in_deg
 
     def normalize(self):
-        """ Returns a normalized unit vector """
+        """Returns a normalized unit vector
+
+        Returns
+        -------
+        Vector
+        """
         norm = self.norm()
-        normed = tuple(comp/norm for comp in self)
+        normed = tuple(comp / norm for comp in self)
         return Vector(*normed)
 
-    def rotate(self, *args):
-        """ Rotate this vector. If passed a number, assumes this is a
-            2D vector and rotates by the passed value in degrees.  Otherwise,
-            assumes the passed value is a list acting as a matrix which rotates the vector.
+    def rotate(self, rotation):
+        """Rotate this vector.
+
+
+        If passed a number, assumes this is a 2D vector and rotates by the
+        passed value in degrees. Otherwise assumes the passed value is a list
+        acting as a matrix which rotates the vector.
         """
-        if len(args)==1 and type(args[0]) == type(1) or type(args[0]) == type(1.):
+        if (len(args) == 1 and type(args[0]) == type(1)
+            or type(args[0]) == type(1.0)):
             # So, if rotate is passed an int or a float...
             if len(self) != 2:
                 raise ValueError("Rotation axis not defined for greater than 2D vector")
@@ -75,15 +122,15 @@ class Vector(object):
         # Just applying the 2D rotation matrix
         dc, ds = math.cos(theta), math.sin(theta)
         x, y = self.values
-        x, y = dc*x - ds*y, ds*x + dc*y
+        x, y = dc * x - ds * y, ds * x + dc * y
         return Vector(x, y)
 
     def matrix_mult(self, matrix):
         """ Multiply this vector by a matrix.  Assuming matrix is a list of lists.
 
             Example:
-            mat = [[1,2,3],[-1,0,1],[3,4,5]]
-            Vector(1,2,3).matrix_mult(mat) ->  (14, 2, 26)
+            mat = [[1, 2, 3],[-1, 0, 1],[3, 4, 5]]
+            Vector(1, 2, 3).matrix_mult(mat) ->  (14, 2, 26)
 
         """
         if not all(len(row) == len(self) for row in matrix):
@@ -91,7 +138,7 @@ class Vector(object):
 
         # Grab a row from the matrix, make it a Vector, take the dot product,
         # and store it as the first component
-        product = tuple(Vector(*row)*self for row in matrix)
+        product = tuple(Vector(*row) * self for row in matrix)
 
         return Vector(*product)
 
@@ -112,7 +159,7 @@ class Vector(object):
             return Vector(*product)
 
     def __rmul__(self, other):
-        """ Called if 4*self for instance """
+        """ Called if 4 * self for instance """
         return self.__mul__(other)
 
     def __div__(self, other):

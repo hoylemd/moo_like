@@ -1,4 +1,3 @@
-# coding=utf8
 """
 The MIT License (MIT)
 
@@ -75,12 +74,14 @@ class Vector(object):
         -------
         float
         """
-        arg_in_rad = math.acos(Vector(0, 1) * self / self.norm())
-        arg_in_deg = math.degrees(arg_in_rad)
+        argument = math.acos(Vector(0, 1) * self / self.norm())
         if self.values[0] < 0:
-            return 360 - arg_in_deg
+            argument = TAU - argument
 
-        return arg_in_deg
+        if unit == UNIT_DEGREES:
+            return math.degrees(argument)
+
+        return argument
 
     def normalize(self):
         """Returns a normalized unit vector

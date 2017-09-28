@@ -3,6 +3,7 @@ from math import sqrt
 
 Vector = namedtuple('Vector', ['x', 'y'])
 
+
 class Vector(object):
     def __init__(self, x, y):
         self._vector = (x, y)
@@ -22,7 +23,6 @@ class Vector(object):
         return repr(self)
 
 
-
 def get_direction_vector(a, b):
     """calculates a unit vector represetning the direction from a to b
 
@@ -39,5 +39,3 @@ def get_direction_vector(a, b):
     direction = Vector(b.x - a.x, b.y - a.y)
     magnitude = sqrt(direction.x ** 2, direction.y ** 2)
     return Vector(direction.x / magnitude, direction.y / magnitude)
-
-def

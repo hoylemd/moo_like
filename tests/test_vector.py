@@ -8,7 +8,7 @@ class TestVector(TestCase):
         """Should invoke a vector with the provided components"""
         sut = Vector(3, 4)
         self.assertIsNotNone(sut)
-        self.assertItemsEqual(sut, [3, 4])
+        self.assertItemsEqual(sut, (3, 4,))
 
     def test_argument_45(self):
         """Should return the correct angle in Radians"""
@@ -36,5 +36,5 @@ class TestVector(TestCase):
         sut = Vector(7, -2)
         unit = sut.normalize()
         self.assertAlmostEqual(sut.argument(), unit.argument())
-        self.assertItemsEqual([round(comp, 7) for comp in unit],
-                              [0.9615239, -0.2747211])
+        self.assertItemsEqual((round(comp, 7) for comp in unit),
+                              (0.9615239, -0.2747211,))

@@ -4,6 +4,14 @@ from vector import Vector, TAU
 
 
 class TestVector(TestCase):
+    def assertItemsAlmostEqual(self, a, b, message=None):
+        """Asserts that every member of a and b are == to 7 decimal places"""
+        self.assertItemsEqual(
+            (round(element, 7) for element in a),
+            (round(element, 7) for element in b),
+            None,
+        )
+
     def test_construct__2d(self):
         """Should invoke a vector with the provided components"""
         sut = Vector(3, 4)

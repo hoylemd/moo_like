@@ -88,7 +88,7 @@ class TestVector(TestCase):
         """Should raise exception"""
         sut = Vector(7, 5)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             sut * 'string'
 
     def test_rmult(self):
@@ -110,3 +110,26 @@ class TestVector(TestCase):
         sut = Vector(-2, 15)
         with self.assertRaises(ZeroDivisionError):
             sut / 0
+
+    def test_add__vector(self):
+        """Should return a vector of the sum of operands' components"""
+        sut = Vector(6, 2.5)
+        operand = Vector(-2, 8)
+
+        sum = sut + operand
+        self.assertItemsAlmostEqual(sum, (4, 10.5))
+
+    def test_add__number(self):
+        """Should return a vector of the sum of operands' components"""
+        sut = Vector(1.7, 9)
+
+        with self.assertRaises(TypeError):
+            sut + 3
+
+    def test_radd(self):
+        """Should call __add__"""
+        sut = Vector(8.2, -1)
+        with patch('vector.Vector.__add__') as add_mock:
+            sut + 2
+
+        add_mock.assert_called_once()

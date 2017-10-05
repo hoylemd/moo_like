@@ -23,10 +23,13 @@ THE SOFTWARE.
 """
 
 import math
+import sys
 
 UNIT_DEGREES = 'decrees'
 UNIT_RADIANS = 'radians'
 TAU = 2 * math.pi
+UNSUPPORTED_TYPES_FORMAT = (
+    "unsupported operand type(s) for {op}: '{t1}' and '{t2}'")
 
 
 class Vector(object):
@@ -196,7 +199,16 @@ class Vector(object):
         if isinstance(other, Vector):
             return self._dot_product(other)
 
-        operand = float(other)
+        try:
+            operand = float(other)
+        except ValueError:
+            exc_info = sys.exc_info()
+            raise TypeError(UNSUPPORTED_TYPES_FORMAT.format(
+                op='*',
+                t1=str(type(self)),
+                t2=str(type(other)),
+            )), None, exc_info[2]
+
         products = (a * operand for a in self)
         return Vector(*products)
 
@@ -224,14 +236,45 @@ class Vector(object):
         -------
         Vector
         """
-        operand = float(other)
+        try:
+            operand = float(other)
+        except ValueError:
+            exc_info = sys.exc_info()
+            raise TypeError(UNSUPPORTED_TYPES_FORMAT.format(
+                op='/',
+                t1=str(type(self)),
+                t2=str(type(other)),
+            )), None, exc_info[2]
+
         quotients = tuple(a / operand for a in self)
         return Vector(*quotients)
 
     def __add__(self, other):
-        """ Returns the vector addition of self and other """
-        added = tuple(a + b for a, b in zip(self, other))
-        return Vector(*added)
+        """Addition operation
+
+        Parameters
+        ----------
+        other : int or float
+
+        Returns
+        -------
+        Vector
+        """
+        try:
+            sums = tuple(a + b for a, b in zip(self, other))
+        except TypeError:
+            exc_info = sys.exc_info()
+            raise TypeError(UNSUPPORTED_TYPES_FORMAT.format(
+                op='+',
+                t1=str(type(self)),
+                t2=str(type(other)),
+            )), None, exc_info[2]
+
+        return Vector(*sums)
+
+    def __radd__(self, other):
+        """Right-size Addition operation"""
+        return self + other
 
     def __sub__(self, other):
         """ Returns the vector difference of self and other """

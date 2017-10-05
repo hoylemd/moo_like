@@ -42,7 +42,12 @@ class TestVector(TestCase):
     def test_normalize(self):
         """Should return the correct unit vector"""
         sut = Vector(7, -2)
-        unit = sut.normalize()
-        self.assertAlmostEqual(sut.argument(), unit.argument())
-        self.assertItemsEqual((round(comp, 7) for comp in unit),
-                              (0.9615239, -0.2747211,))
+        unit_vector = sut.normalize()
+        self.assertAlmostEqual(sut.argument(), unit_vector.argument())
+        self.assertItemsAlmostEqual(unit_vector, (0.9615239, -0.2747211,))
+
+    def test_rotate_by_angle__quarter_tau(self):
+        """Should rotate the vector a quarter turn"""
+        sut = Vector(3, 2)
+        rotated_vector = sut.rotate_by_angle(TAU/4.)
+        self.assertItemsAlmostEqual(rotated_vector, (-2, 3))

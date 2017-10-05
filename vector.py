@@ -188,22 +188,45 @@ class Vector(object):
         Parameters
         ----------
         other : Vector, int, or float
+
+        Returns
+        -------
+        float or Vector
         """
         if isinstance(other, Vector):
             return self._dot_product(other)
 
         operand = float(other)
-        components = (a * operand for a in self)
-        return Vector(*components)
+        products = (a * operand for a in self)
+        return Vector(*products)
 
     def __rmul__(self, other):
-        """ Called if 4 * self for instance """
+        """Multiplication operation when second operand
+
+        Parameters
+        ----------
+        other : Vector, int, or float
+
+        Returns
+        -------
+        float or Vector
+        """
         return self.__mul__(other)
 
     def __div__(self, other):
-        if type(other) == type(1) or type(other) == type(1.0):
-            divided = tuple(a / other for a in self)
-            return Vector(*divided)
+        """Division operation
+
+        Parameters
+        ----------
+        other : int or float
+
+        Returns
+        -------
+        Vector
+        """
+        operand = float(other)
+        quotients = tuple(a / operand for a in self)
+        return Vector(*quotients)
 
     def __add__(self, other):
         """ Returns the vector addition of self and other """

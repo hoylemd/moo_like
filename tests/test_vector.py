@@ -60,7 +60,7 @@ class TestVector(TestCase):
         self.assertItemsAlmostEqual(rotated_vector, (-3, 4.5))
 
     def test_dot_product(self):
-        """Should compute sum of inter-vector components"""
+        """Should compute sum of component-wise products"""
         sut = Vector(1, 2)
         operand = Vector(3, -1)
         expected = (1 * 3) + (2 * -1)
@@ -99,3 +99,14 @@ class TestVector(TestCase):
             5 * sut
 
         mul_mock.assert_called_once()
+
+    def test_div__number(self):
+        """Should compute new vector with original components / operand"""
+        sut = Vector(1.5, -0.75)
+        self.assertItemsAlmostEqual(sut / 2, (0.75, -0.375))
+
+    def test_div__zero(self):
+        """Should raise ZeroDivisionError"""
+        sut = Vector(-2, 15)
+        with self.assertRaises(ZeroDivisionError):
+            sut / 0

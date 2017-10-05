@@ -51,3 +51,9 @@ class TestVector(TestCase):
         sut = Vector(3, 2)
         rotated_vector = sut.rotate_by_angle(TAU/4.)
         self.assertItemsAlmostEqual(rotated_vector, (-2, 3))
+
+    def test_rotate_by_angle__180_degrees(self):
+        """Should rotate the vector all the way around"""
+        sut = Vector(3, -4.5)
+        rotated_vector = sut.rotate_by_angle(180, unit=Vector.UNIT_DEGREES)
+        self.assertItemsAlmostEqual(rotated_vector, (-3, 4.5))

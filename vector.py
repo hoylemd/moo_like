@@ -104,11 +104,15 @@ class Vector(object):
         unit : Vector.UNIT_DEGREES or Vector.UNIT_RADIANS
             determines the unit in which `theta` will be expressed.
             defaults to Vector.UNIT_RADIANS
+
+        Returns
+        -------
+        Vector
         """
-        if len(self) != 2:
-            raise ValueError(
-                'Rotation axis not defined for greater than 2D vector'
-            )
+        assert len(self) == 2, (
+            'Rotation axis not defined for greater than 2D vector (this: {})'
+            .format(len(self))
+        )
 
         if unit == UNIT_DEGREES:
             theta = math.radians(theta)
@@ -120,20 +124,40 @@ class Vector(object):
         return Vector(x, y)
 
     def rotate_by_matrix(self, matrix):
-        if not all(len(row) == len(v) for row in matrix) or not len(matrix)==len(self):
-            raise ValueError("Rotation matrix must be square and same dimensions as vector")
+        """Rotate this vector by the provided matrix
+
+        Parameters
+        ----------
+        matrix : sequence
+            Must be a square metrix with the same dimensions as this vector
+
+        Returns
+        -------
+        Vector
+        """
+        assert all(len(row) == len(matrix) for row in matrix), (
+            'Rotation matrix must be square: {}'
+            .format(matrix)
+        )
+
         return self.matrix_mult(matrix)
 
     def matrix_mult(self, matrix):
-        """ Multiply this vector by a matrix.  Assuming matrix is a list of lists.
+        """Multiply this vector by a matrix.
 
-            Example:
-            mat = [[1, 2, 3],[-1, 0, 1],[3, 4, 5]]
-            Vector(1, 2, 3).matrix_mult(mat) ->  (14, 2, 26)
+         Parameters
+        ----------
+        matrix : sequence
+            Must be a square metrix with the same dimensions as this vector
 
+        Returns
+        -------
+        Vector
         """
-        if not all(len(row) == len(self) for row in matrix):
-            raise ValueError('Matrix must match vector dimensions')
+        assert all(len(row) == len(self) for row in matrix), (
+            'Matrix must match vector dimensions: {}'
+            .format(matrix)
+        )
 
         # Grab a row from the matrix, make it a Vector, take the dot product,
         # and store it as the first component

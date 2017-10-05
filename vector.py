@@ -145,7 +145,7 @@ class Vector(object):
     def matrix_mult(self, matrix):
         """Multiply this vector by a matrix.
 
-         Parameters
+        Parameters
         ----------
         matrix : sequence
             Must be a square metrix with the same dimensions as this vector
@@ -165,21 +165,36 @@ class Vector(object):
 
         return Vector(*product)
 
-    def inner(self, other):
-        """ Returns the dot product (inner product) of self and other vector
+    def _dot_product(self, other):
+        """Dot product (inner product) of self and other vector
+
+        Parameters
+        ----------
+        other : Vector
+
+        Returns
+        -------
+        float
         """
         return sum(a * b for a, b in zip(self, other))
 
     def __mul__(self, other):
-        """ Returns the dot product of self and other if multiplied
-            by another Vector.  If multiplied by an int or float,
-            multiplies each component by other.
+        """Multiplication operation
+
+        If multiplied with a `Vector`, returns the dot product.
+        If multiplied with a number, returns a new vector containing the
+        products of this vector's elements with `other`
+
+        Parameters
+        ----------
+        other : Vector, int, or float
         """
-        if type(other) == type(self):
-            return self.inner(other)
-        elif type(other) == type(1) or type(other) == type(1.0):
-            product = tuple(a * other for a in self)
-            return Vector(*product)
+        if isinstance(other, Vector):
+            return self._dot_product(other)
+
+        operand = float(other)
+        components = (a * operand for a in self)
+        return Vector(*components)
 
     def __rmul__(self, other):
         """ Called if 4 * self for instance """

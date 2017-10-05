@@ -277,9 +277,27 @@ class Vector(object):
         return self + other
 
     def __sub__(self, other):
-        """ Returns the vector difference of self and other """
-        subbed = tuple(a - b for a, b in zip(self, other))
-        return Vector(*subbed)
+        """Subtraction operation
+
+        Parameters
+        ----------
+        other : int or float
+
+        Returns
+        -------
+        Vector
+        """
+        try:
+            differences = tuple(a - b for a, b in zip(self, other))
+        except TypeError:
+            exc_info = sys.exc_info()
+            raise TypeError(UNSUPPORTED_TYPES_FORMAT.format(
+                op='-',
+                t1=str(type(self)),
+                t2=str(type(other)),
+            )), None, exc_info[2]
+
+        return Vector(*differences)
 
     def __iter__(self):
         return self.values.__iter__()

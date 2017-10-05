@@ -120,7 +120,7 @@ class TestVector(TestCase):
         self.assertItemsAlmostEqual(sum, (4, 10.5))
 
     def test_add__number(self):
-        """Should return a vector of the sum of operands' components"""
+        """Should raise error"""
         sut = Vector(1.7, 9)
 
         with self.assertRaises(TypeError):
@@ -133,3 +133,18 @@ class TestVector(TestCase):
             sut + 2
 
         add_mock.assert_called_once()
+
+    def test_sub__vector(self):
+        """Should return a vector of the differences of operands' components"""
+        sut = Vector(4, 10)
+        operand = Vector(4, -2)
+
+        difference = sut - operand
+        self.assertItemsAlmostEqual(difference, (0, 12))
+
+    def test_sub__number(self):
+        """Should raise error"""
+        sut = Vector(1.7, 9)
+
+        with self.assertRaises(TypeError):
+            sut - 3

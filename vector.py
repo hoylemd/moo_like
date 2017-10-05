@@ -66,9 +66,9 @@ class Vector(object):
 
         Parameters
         ----------
-        unit : UNIT_DEGREES or UNIT_RADIANS
+        unit : Vector.UNIT_DEGREES or Vector.UNIT_RADIANS
             determines the unit in which the argument will be expressed.
-            defaults to UNIT_RADIANS
+            defaults to Vector.UNIT_RADIANS
 
         Returns
         -------
@@ -94,37 +94,35 @@ class Vector(object):
         normed = tuple(comp / norm for comp in self)
         return Vector(*normed)
 
-    def rotate(self, rotation):
-        """Rotate this vector.
+    def rotate_by_angle(self, theta, unit=UNIT_RADIANS):
+        """Rotate this vector clockwise by the provided angle
 
-
-        If passed a number, assumes this is a 2D vector and rotates by the
-        passed value in degrees. Otherwise assumes the passed value is a list
-        acting as a matrix which rotates the vector.
+        Parameters
+        ----------
+        theta : int or float
+            The angle to rotate the vector about the origin
+        unit : Vector.UNIT_DEGREES or Vector.UNIT_RADIANS
+            determines the unit in which `theta` will be expressed.
+            defaults to Vector.UNIT_RADIANS
         """
-        if (len(args) == 1 and type(args[0]) == type(1)
-            or type(args[0]) == type(1.0)):
-            # So, if rotate is passed an int or a float...
-            if len(self) != 2:
-                raise ValueError("Rotation axis not defined for greater than 2D vector")
-            return self._rotate2D(*args)
-        elif len(args)==1:
-            matrix = args[0]
-            if not all(len(row) == len(v) for row in matrix) or not len(matrix)==len(self):
-                raise ValueError("Rotation matrix must be square and same dimensions as vector")
-            return self.matrix_mult(matrix)
+        if len(self) != 2:
+            raise ValueError(
+                'Rotation axis not defined for greater than 2D vector'
+            )
 
-    def _rotate2D(self, theta):
-        """ Rotate this vector by theta in degrees.
+        if unit == UNIT_DEGREES:
+            theta = math.radians(theta)
 
-            Returns a new vector.
-        """
-        theta = math.radians(theta)
         # Just applying the 2D rotation matrix
         dc, ds = math.cos(theta), math.sin(theta)
         x, y = self.values
         x, y = dc * x - ds * y, ds * x + dc * y
         return Vector(x, y)
+
+    def rotate_by_matrix(self, matrix):
+        if not all(len(row) == len(v) for row in matrix) or not len(matrix)==len(self):
+            raise ValueError("Rotation matrix must be square and same dimensions as vector")
+        return self.matrix_mult(matrix)
 
     def matrix_mult(self, matrix):
         """ Multiply this vector by a matrix.  Assuming matrix is a list of lists.

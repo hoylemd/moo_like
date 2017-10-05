@@ -1,4 +1,5 @@
 from unittest import TestCase
+from mock import patch
 
 from vector import Vector, TAU
 
@@ -57,3 +58,31 @@ class TestVector(TestCase):
         sut = Vector(3, -4.5)
         rotated_vector = sut.rotate_by_angle(180, unit=Vector.UNIT_DEGREES)
         self.assertItemsAlmostEqual(rotated_vector, (-3, 4.5))
+
+    def test_dot_product(self):
+        """Should compute sum of inter-vector components"""
+        sut = Vector(1, 2)
+        operand = Vector(3, -1)
+        expected = (1 * 3) + (2 * -1)
+
+        product = sut._dot_product(operand)
+        self.assertEqual(product, expected)
+
+    def test_mult__number(self):
+        """Should multiply each component by the operand"""
+        sut = Vector(2, -4)
+        product = sut * 3
+        self.assertItemsEqual(product, (6, -12))
+
+    def test_mult__vector(self):
+        """Should compute the dot product of the two vectors"""
+        sut = Vector(4, 5)
+        operand = Vector(2, 3)
+
+        with patch('vector.Vector._dot_product') as dot_product_mock:
+            sut * operand
+            dot_product_mock.assert_called_once()
+
+    def test_mult__string(self):
+        """Should raise exception"""
+        pass

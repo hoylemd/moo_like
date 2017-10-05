@@ -81,8 +81,21 @@ class TestVector(TestCase):
 
         with patch('vector.Vector._dot_product') as dot_product_mock:
             sut * operand
-            dot_product_mock.assert_called_once()
+
+        dot_product_mock.assert_called_once()
 
     def test_mult__string(self):
         """Should raise exception"""
-        pass
+        sut = Vector(7, 5)
+
+        with self.assertRaises(ValueError):
+            sut * 'string'
+
+    def test_rmult(self):
+        """Should call __mul__"""
+        sut = Vector(1, -3)
+
+        with patch('vector.Vector.__mul__') as mul_mock:
+            5 * sut
+
+        mul_mock.assert_called_once()

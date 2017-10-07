@@ -148,3 +148,15 @@ class TestVector(TestCase):
 
         with self.assertRaises(TypeError):
             sut - 3
+
+    def test_x(self):
+        """Should access the first component"""
+        sut = Vector(2, -4)
+
+        self.assertEqual(sut.x, 2)
+
+    def test_y(self):
+        """Should access the first component"""
+        sut = Vector(2, -4)
+
+        self.assertEqual(sut.y, -4)

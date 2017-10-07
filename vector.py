@@ -168,6 +168,16 @@ class Vector(object):
 
         return Vector(*product)
 
+    @property
+    def x(self):
+        """2D vector x-component"""
+        return self[0]
+
+    @property
+    def y(self):
+        """2D vector y-component"""
+        return self[1]
+
     def _dot_product(self, other):
         """Dot product (inner product) of self and other vector
 

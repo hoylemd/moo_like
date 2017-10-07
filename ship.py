@@ -1,4 +1,4 @@
-from util import Vector
+from vector import Vector
 
 
 class Ship(object):
@@ -18,7 +18,7 @@ class Ship(object):
         self._active = True
 
     def _move_to(self, x, y=None):
-        if y is None and (x.x and x.y):
+        if y is None and isinstance(x, Vector):
             self._position = x
         else:
             self._position = Vector(x, y)

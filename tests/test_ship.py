@@ -16,12 +16,6 @@ class TestShip(TestCase):
             damage=25,
         )
 
-    def test_take_damage__shield_absorb(self):
-        """Should not damage hull, only shields"""
-        self.ship.take_damage(45)
-        self.assertEqual(self.ship.hull, self.ship.max_hull)
-        self.assertEqual(self.ship.shield, self.ship.max_shield - 45)
-
     def test_move_to__vector(self):
         """Should Replace the ship's position"""
         new_vector = Vector(2, 3)
@@ -71,3 +65,17 @@ class TestShip(TestCase):
 
         self.assertEqual(self.ship.hull, 0)
         cm.assert_called_once()
+
+    def test_take_damage__shield_absorb(self):
+        """Should not damage hull, only shields"""
+        self.ship.take_damage(45)
+        self.assertEqual(self.ship.hull, self.ship.max_hull)
+        self.assertEqual(self.ship.shield, 5)
+
+    def test_take_damage__hull_absorb(self):
+        """Should deplete shields and call damage hull"""
+        with patch('ship.Ship._damage_hull') as cm:
+            self.ship.take_damage(55)
+
+        self.assertEqual(self.ship.shield, 0)
+        cm.assert_called_with(5)

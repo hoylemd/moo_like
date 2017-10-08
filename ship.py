@@ -82,6 +82,7 @@ class Ship(object):
             self._die()
 
     def _die(self):
+        """Hook for when ship is destroyed"""
         self._active = False
 
     def take_damage(self, damage):

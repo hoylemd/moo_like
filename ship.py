@@ -86,6 +86,12 @@ class Ship(object):
         self._active = False
 
     def take_damage(self, damage):
+        """Applies damage to the ship. First to shields, then to hull
+
+        Parameters
+        ----------
+        damage : int
+        """
         hull_damage = self._damage_shield(damage)
 
         if hull_damage:

@@ -1,4 +1,5 @@
 from unittest import TestCase
+from mock import patch
 
 from ship import Ship
 from vector import Vector
@@ -54,3 +55,19 @@ class TestShip(TestCase):
     def test_damage_shield__more(self):
         """Should return extra damage when more damage than shield applied"""
         self.assertEqual(self.ship._damage_shield(75), 25)
+
+    def test_damage_hull__insufficient(self):
+        """Should not kill the ship"""
+        with patch('ship.Ship._die') as cm:
+            self.ship._damage_hull(75)
+
+        self.assertEqual(self.ship.hull, 25)
+        cm.assert_not_called()
+
+    def test_damage_hull__enough(self):
+        """Should kill the ship"""
+        with patch('ship.Ship._die') as cm:
+            self.ship._damage_hull(125)
+
+        self.assertEqual(self.ship.hull, 0)
+        cm.assert_called_once()

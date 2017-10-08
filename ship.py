@@ -48,7 +48,17 @@ class Ship(object):
             self._destination = Vector(x, y)
 
     def _damage_shield(self, damage):
-        """Applies damage to the ships' shield, returning any damage left"""
+        """Applies damage to the ships' shield, returning any damage left
+
+        Parameters
+        ----------
+        damage : int
+
+        Returns
+        -------
+        int
+            amount of damage left after shield damage
+        """
         self.shield -= damage
 
         if self.shield < 0:
@@ -59,6 +69,12 @@ class Ship(object):
         return 0
 
     def _damage_hull(self, damage):
+        """Applies damage directly to the ship's hull, maybe killing the ship
+
+        Parameters
+        ----------
+        damage : int
+        """
         self.hull -= damage
 
         if self.hull <= 0:

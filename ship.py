@@ -18,12 +18,30 @@ class Ship(object):
         self._active = True
 
     def _move_to(self, x, y=None):
+        """Move the ship to a new position
+
+        Parameters
+        ----------
+        x : Vector, int, or float
+            New `Vector` representing the position, or first component thereof
+        y : int or float
+            optional, default `None`. Second component of new vector
+        """
         if y is None and isinstance(x, Vector):
             self._position = x
         else:
             self._position = Vector(x, y)
 
     def set_course(self, x, y=None):
+        """Set a new destination for the ship
+
+        Parameters
+        ----------
+        x : Vector, int, or float
+            New `Vector` representing new destination, or first component
+        y : int or float
+            optional, default `None`. Second component of new vector
+        """
         if y is None and (x.x and x.y):
             self._destination = x
         else:

@@ -29,3 +29,20 @@ class TestShip(TestCase):
         sut._move_to(7, -2)
 
         self.assertItemsEqual(sut._position, (7, -2,))
+
+    def test_set_course__vector(self):
+        """Should replace the ship's destination"""
+        sut = Ship('Guinea', 100, 50, 5, 200, 25)
+
+        new_vector = Vector(2, 3)
+        sut.set_course(new_vector)
+
+        self.assertIs(sut._destination, new_vector)
+
+    def test_set_course__components(self):
+        """Should Replace the ship's position"""
+        sut = Ship('Guinea', 100, 50, 5, 200, 25)
+
+        sut.set_course(7, -2)
+
+        self.assertItemsEqual(sut._destination, (7, -2,))
